@@ -95,3 +95,58 @@ Finish time: 10:30 pm
 Actual time needed to complete: 
 
 1.5 hours
+
+
+---------------
+### lab 07
+
+-----------------
+
+
+Name of feature:
+
+Set up your server repository.
+Estimate of time needed to complete:
+
+30 minutes
+
+Start time: 3:00 pm
+
+Finish time: 3:20 pm
+
+Actual time needed to complete:
+
+20 minutes
+
+--------------
+
+Name of feature:
+
+Weather (placeholder): As a user of City Explorer, I want to see weather info for the city I searched, so that I know how to pack for an upcoming trip.
+Estimate of time needed to complete:
+
+1 hour
+
+Start time: 3:20 pm
+
+Finish time: 4:30 pm
+
+Actual time needed to complete:
+
+1.5 hour
+
+-----------
+
+Name of feature: 3. Errors (revisited): As a user, I want clear messages if something goes wrong so I know if I need to make any changes or try again in a different manner.
+
+Estimate of time needed to complete:
+
+30 minutes
+
+Start time: 4:30 pm
+
+Finish time: 5:00 pm
+
+Actual time needed to complete:
+
+30 minutes
