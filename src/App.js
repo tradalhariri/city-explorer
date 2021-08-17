@@ -3,8 +3,9 @@ import LocationSearchForm from './components/LocationSearchForm';
 import React from 'react';
 import axios from 'axios';
 import LocationFigure from './components/LocationFigure';
-import { Toast } from 'react-bootstrap';
+import { Toast,Row } from 'react-bootstrap';
 import Weather from './components/Weather';
+import Movie from './components/Movie';
 
 class App extends React.Component {
   constructor() {
@@ -14,7 +15,8 @@ class App extends React.Component {
       locationMap: '',
       status: false,
       statusText: '',
-      weatherData: []
+      weatherData: [],
+      movies: []
     }
   }
 
@@ -62,6 +64,22 @@ class App extends React.Component {
     } catch (error) {
     }
 
+
+
+    ///
+
+    try {
+      let movies = await axios.get(`${rootPath}/movies?searchQuery=${locationName}`);
+
+      movies.data.length > 0 ? this.setState({
+        movies: movies.data
+      }) : this.setState({
+        movies: []
+      })
+
+    } catch (error) {
+    }
+
   }
 
   render() {
@@ -77,7 +95,11 @@ class App extends React.Component {
           </Toast.Body>
         </Toast>)}
         {this.state.weatherData.map((day, index) => <Weather eventKey={index} key={index} weatherDay={day} />)}
-
+        <Row   xs={1} sm={2} md={3} lg={4} className="g-4">
+          {this.state.movies.map((movie, idx) => (
+            <Movie movie={movie} key={idx} />
+          ))}
+        </Row>
       </div>
     )
   }
