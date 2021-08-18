@@ -212,3 +212,21 @@ Actual time needed to complete:
 30 minutes
 
 -----------
+
+### lab 9 
+
+Name of feature:
+2. Refactor: Componentize the front-end codebase.
+
+Estimate of time needed to complete:
+
+1 hour
+
+Start time: 2:45 pm
+
+Finish time: 3:30 pm
+
+Actual time needed to complete:
+
+45 minutes
+

@@ -1,11 +1,8 @@
 import './App.css';
-import LocationSearchForm from './components/LocationSearchForm';
 import React from 'react';
 import axios from 'axios';
-import LocationFigure from './components/LocationFigure';
-import { Toast,Row } from 'react-bootstrap';
-import Weather from './components/Weather';
-import Movie from './components/Movie';
+import Header from './components/Header';
+import Main from './components/Main';
 
 class App extends React.Component {
   constructor() {
@@ -20,15 +17,14 @@ class App extends React.Component {
     }
   }
 
-  getLocation = async (event) => {
+  getLocation = (event) => {
     event.preventDefault();
 
     const locationName = event.target.cityName.value;
     const key = process.env.REACT_APP_LOCATION_KEY;
     const rootPath = process.env.REACT_APP_ROOT_PATH;
-    let locationData;
-    try {
-      locationData = await axios.get(`https://eu1.locationiq.com/v1/search.php?key=${key}&q=${locationName}&format=json`);
+
+    axios.get(`https://eu1.locationiq.com/v1/search.php?key=${key}&q=${locationName}&format=json`).then(locationData => {
 
       this.setState({
         location: locationData.data[0],
@@ -41,65 +37,40 @@ class App extends React.Component {
         locationMap: locationMap
       })
 
-    }
-    catch (error) {
+    }).catch((error) => {
       if (error.response) {
         this.setState({
           status: error.response.status,
           statusText: error.response.data.error,
         })
       }
-    };
+    });
 
 
-    try {
-      let weatherData = await axios.get(`${rootPath}/weather?lat=${this.state.location.lat}&lon=${this.state.location.lon}&searchQuery=${locationName}`);
-
+    axios.get(`${rootPath}/weather?lat=${this.state.location.lat}&lon=${this.state.location.lon}&searchQuery=${locationName}`).then(weatherData => {
       weatherData.data.length > 0 ? this.setState({
         weatherData: weatherData.data
       }) : this.setState({
         weatherData: []
       })
+    });
 
-    } catch (error) {
-    }
-
-
-
-    ///
-
-    try {
-      let movies = await axios.get(`${rootPath}/movies?searchQuery=${locationName}`);
-
+    axios.get(`${rootPath}/movies?searchQuery=${locationName}`).then(movies => {
       movies.data.length > 0 ? this.setState({
         movies: movies.data
       }) : this.setState({
         movies: []
       })
 
-    } catch (error) {
-    }
+    })
 
   }
 
   render() {
     return (
       <div className="App">
-        <h1>City Explorer</h1>
-        <LocationSearchForm getLocation={this.getLocation} />
-        {this.state.status === 200 ? <LocationFigure location={this.state.location} locationMap={this.state.locationMap} /> : (this.state.status && <Toast>
-          <Toast.Body>
-            <p>{this.state.status}</p>
-            <p> {this.state.statusText}</p>
-
-          </Toast.Body>
-        </Toast>)}
-        {this.state.weatherData.map((day, index) => <Weather eventKey={index} key={index} weatherDay={day} />)}
-        <Row   xs={1} sm={2} md={3} lg={4} className="g-4">
-          {this.state.movies.map((movie, idx) => (
-            <Movie movie={movie} key={idx} />
-          ))}
-        </Row>
+        <Header />
+        <Main getLocation={this.getLocation} state={this.state} />
       </div>
     )
   }
