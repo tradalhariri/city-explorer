@@ -1,4 +1,5 @@
 import React from "react";
+import WeatherDay from "./WeatherDay";
 import { Accordion } from "react-bootstrap";
 
 class Weather extends React.Component {
@@ -8,15 +9,7 @@ class Weather extends React.Component {
 
     render() {
         return (
-            <Accordion>
-                <Accordion.Item eventKey={this.props.weatherDay.eventKey}>
-                    <Accordion.Header>{this.props.weatherDay.date}</Accordion.Header>
-                    <Accordion.Body>
-                    {this.props.weatherDay.description}
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion>
-
+            this.props.weatherData.map((day, index) => <WeatherDay  key={index} weatherDay={day} />)
         )
     }
 }
