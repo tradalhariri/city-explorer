@@ -9,7 +9,11 @@ class Weather extends React.Component {
 
     render() {
         return (
-            this.props.weatherData.map((day, index) => <WeatherDay  key={index} weatherDay={day} />)
+            <>
+                <h2 style={{ margin: "20px auto" }}>Weather </h2>
+                {this.props.weatherData.map((day, index) => <WeatherDay key={index} weatherDay={day} />)}
+
+            </>
         )
     }
 }
