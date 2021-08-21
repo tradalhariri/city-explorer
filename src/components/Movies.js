@@ -13,11 +13,14 @@ class Movies extends React.Component{
 
     render(){
         return (
+          <>
+            <h2 style={{margin:"20px auto"}}>Movies</h2>
             <Row xs={1} sm={2} md={3} lg={4} className="g-4">
             {this.props.movies.map((movie, idx) => (
               <Movie movie={movie} key={idx} />
             ))}
           </Row>
+          </>
         )
     }
 }

@@ -11,6 +11,7 @@ class LocationFigure extends React.Component {
  render() {
      return (
             <>
+            <h2 style={{ margin: "20px auto" }}>Map </h2>
             <Figure style={{marginTop:"50px"}}>
                 <Figure.Image
                     alt={this.props.location.display_name}

@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+.anchor {
+text-decoration: none;
+background-color: teal;
+color: white;
+padding: 10px;
+display: inline-block;
+width: fit-content;
+font-size: 18px;
+}
+
+.anchor:hover {
+  text-decoration: none;
+  background-color: white;
+  color: teal;
+  padding: 12px;
+  }

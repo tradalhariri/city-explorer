@@ -3,26 +3,83 @@ import React from 'react';
 import axios from 'axios';
 import Header from './components/Header';
 import Main from './components/Main';
+import constants from './Constants/constants';
+
 
 class App extends React.Component {
   constructor() {
     super()
     this.state = {
       location: {},
+      locationName:'',
       locationMap: '',
       status: false,
       statusText: '',
       weatherData: [],
-      movies: []
+      movies: [],
+      restaurants:[],
+      navStatus:{
+        map:false,
+        movies:false,
+        restaurants:false,
+        weather:false
+      }
     }
   }
 
-  getLocation = (event) => {
+getWeather = (event) =>{
+
+  this.setState({
+    navStatus:{
+      map:false,
+      movies:false,
+      restaurants:false,
+      weather:true
+    }
+  })
+}
+
+  getMovies=(event)=>{
+        this.setState({
+          navStatus:{
+            map:false,
+            movies:true,
+            restaurants:false,
+            weather:false
+          }
+        })
+  }
+
+  getRestaurants=(event)=>{
+    this.setState({
+      navStatus:{
+        map:false,
+        movies:false,
+        restaurants:true,
+        weather:false
+      }
+    })
+}
+
+getMap=(event)=>{
+  this.setState({
+    navStatus:{
+      map:true,
+      movies:false,
+      restaurants:false,
+      weather:false
+    }
+  })
+}
+
+   getLocation = async (event) => {
     event.preventDefault();
 
     const locationName = event.target.cityName.value;
-    const key = process.env.REACT_APP_LOCATION_KEY;
-    const rootPath = process.env.REACT_APP_ROOT_PATH;
+    await this.setState({
+      locationName:locationName,
+    })
+    const key = constants.locationKey;
 
     axios.get(`https://eu1.locationiq.com/v1/search.php?key=${key}&q=${locationName}&format=json`).then(locationData => {
 
@@ -32,9 +89,19 @@ class App extends React.Component {
         statusText: locationData.statusText,
       })
       const locationMap = `https://maps.locationiq.com/v3/staticmap?key=${key}&center=${this.state.location.lat},${this.state.location.lon}&format=jpg&markers=icon:large-red-cutout|${this.state.location.lat},${this.state.location.lon}`;
+
       this.setState({
 
         locationMap: locationMap
+      })
+
+      this.setState({
+        navStatus:{
+          map:true,
+          movies:false,
+          restaurants:false,
+          weather:true
+        }
       })
 
     }).catch((error) => {
@@ -46,31 +113,54 @@ class App extends React.Component {
       }
     });
 
+    this.getWeatherData();
+    this.getMoviesData();
+    this.getRestaurantsData();
 
-    axios.get(`${rootPath}/weather?lat=${this.state.location.lat}&lon=${this.state.location.lon}&searchQuery=${locationName}`).then(weatherData => {
+  }
+
+  getWeatherData=()=>{
+    const rootPath = constants.rootPath;
+    axios.get(`${rootPath}/weather?lat=${this.state.location.lat}&lon=${this.state.location.lon}&searchQuery=${this.state.locationName}`).then(weatherData => {
       weatherData.data.length > 0 ? this.setState({
         weatherData: weatherData.data
       }) : this.setState({
         weatherData: []
       })
     });
-
-    axios.get(`${rootPath}/movies?searchQuery=${locationName}`).then(movies => {
+  }
+  
+  getMoviesData=()=>{
+    const rootPath = constants.rootPath;    
+    axios.get(`${rootPath}/movies?searchQuery=${this.state.locationName}`).then(movies => {
       movies.data.length > 0 ? this.setState({
         movies: movies.data
       }) : this.setState({
         movies: []
       })
-
+  
     })
-
   }
+  
+  getRestaurantsData = ()=>{
+    const rootPath = constants.rootPath;
+    axios.get(`${rootPath}/yelp?searchQuery=${this.state.locationName}`).then(restaurants => {
+      restaurants.data.length > 0 ? this.setState({
+        restaurants: restaurants.data
+      }) : this.setState({
+        restaurants: []
+      })
+  
+    })
+  
+  }
+  
 
   render() {
     return (
       <div className="App">
         <Header />
-        <Main getLocation={this.getLocation} state={this.state} />
+        <Main getMovies={this.getMovies} getRestaurants={this.getRestaurants} getMap={this.getMap} getWeather={this.getWeather} getLocation={this.getLocation} state={this.state} />
       </div>
     )
   }
